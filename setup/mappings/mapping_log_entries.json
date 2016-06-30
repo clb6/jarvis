@@ -4,10 +4,6 @@
             "index": "analyzed",
             "type": "string"
         },
-        "setting": {
-            "index": "analyzed",
-            "type": "string"
-        },
         "todo": {
             "index": "analyzed",
             "type": "string"
@@ -26,9 +22,6 @@
         "version": {
             "index": "not_analyzed",
             "type": "string"
-        },
-        "occurred": {
-            "type": "date"
         },
         "created": {
             "type": "date"

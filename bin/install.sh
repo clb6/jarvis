@@ -13,7 +13,7 @@ else
     JARVIS_DIR_ROOT="/opt/jarvis"
 fi
 
-JARVIS_DATA_VERSION="20160528"
+JARVIS_DATA_VERSION="20160628"
 
 LOG_ENTRIES_DIR="$JARVIS_DIR_ROOT/LogEntries-$JARVIS_DATA_VERSION"
 echo "Log entries: $LOG_ENTRIES_DIR"
@@ -31,8 +31,6 @@ ELASTIC_DIR="$JARVIS_DIR_ROOT/Elasticsearch"
 echo "Elasticsearch: $ELASTIC_DIR"
 mkdir -p $ELASTIC_DIR
 
-SNAPSHOT_DIR="$JARVIS_DIR_ROOT/jarvis_snapshots"
-echo "Jarvis snapshots: $SNAPSHOT_DIR"
-mkdir -p $SNAPSHOT_DIR
-
-
+REDIS_DIR="$JARVIS_DIR_ROOT/Redis"
+echo "Redis: $REDIS_DIR"
+mkdir -p $REDIS_DIR
