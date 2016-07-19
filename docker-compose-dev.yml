@@ -1,0 +1,16 @@
+version: "2"
+# Seems docker-compose prefixes the services with the root project name which is "jarvis"
+services:
+    elasticsearch-dev:
+        image: elasticsearch:2.3.3
+        ports:
+            - "9300:9200"
+        volumes:
+            - "/tmp/jarvis/Elasticsearch/:/usr/share/elasticsearch/data"
+    redis-dev:
+        command: redis-server --appendonly yes
+        image: redis:3.2.1
+        ports:
+            - "6400:6379"
+        volumes:
+            - "/tmp/jarvis/Redis/:/data"
