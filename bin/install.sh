@@ -80,5 +80,7 @@ else
     exit 1
 fi
 
+# TODO: Should go ahead and install cli too?
+
 echo; echo;
 echo "Jarvis installation done!"
