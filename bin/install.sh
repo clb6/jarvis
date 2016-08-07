@@ -1,36 +1,30 @@
 #! /bin/bash
 
-# TODO: Stdin the directory
+# Verify that the required dependencies are installed
+
+command -v docker > /dev/null 2>&1 || { echo >&2 "docker must be installed"; exit 1; }
+command -v docker-compose > /dev/null 2>&1 || { echo >&2 "docker-compose must be installed"; exit 1; }
 
 if [ "$1" == "dev" ]; then
-    echo "Installing Jarvis (local development)"
+    echo "Starting Jarvis installation for local development.."
     JARVIS_DIR_ROOT="/tmp/jarvis"
 elif [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root" 1>&2
     exit 1
 else
-    echo "Installing Jarvis"
+    echo "Starting Jarvis installation.."
     JARVIS_DIR_ROOT="/opt/jarvis"
 fi
 
+# Create required directories
+
 JARVIS_DATA_VERSION="20160628"
+echo "Installation directory: $JARVIS_DIR_ROOT"
+echo "Data model version: $JARVIS_DATA_VERSION"
 
-LOG_ENTRIES_DIR="$JARVIS_DIR_ROOT/LogEntries-$JARVIS_DATA_VERSION"
-echo "Log entries: $LOG_ENTRIES_DIR"
-mkdir -p $LOG_ENTRIES_DIR
+for target_dir in "LogEntries-$JARVIS_DATA_VERSION" "Tags-$JARVIS_DATA_VERSION" "Images" "Elasticsearch" "Redis"
+do
+    mkdir -p "$JARVIS_DIR_ROOT/$target_dir"
+done
 
-TAGS_DIR="$JARVIS_DIR_ROOT/Tags-$JARVIS_DATA_VERSION"
-echo "Tags: $TAGS_DIR"
-mkdir -p $TAGS_DIR
-
-IMAGES_DIR="$JARVIS_DIR_ROOT/Images"
-echo "Images: $IMAGES_DIR"
-mkdir -p $IMAGES_DIR
-
-ELASTIC_DIR="$JARVIS_DIR_ROOT/Elasticsearch"
-echo "Elasticsearch: $ELASTIC_DIR"
-mkdir -p $ELASTIC_DIR
-
-REDIS_DIR="$JARVIS_DIR_ROOT/Redis"
-echo "Redis: $REDIS_DIR"
-mkdir -p $REDIS_DIR
+# TODO: Compose up
