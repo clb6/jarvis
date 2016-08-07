@@ -8,7 +8,7 @@ services:
         # TODO: environment approach vs env_file approach
         environment:
             - JARVIS_DATA_VERSION=${JARVIS_DATA_VERSION}
-        image: registry.gitlab.com/mikehwang/jarvis-api:0.13.0
+        image: registry.gitlab.com/mikehwang/jarvis-api:0.14.0
         links:
             - redis:redis.jarvis.home
             - elasticsearch:elasticsearch.jarvis.home
