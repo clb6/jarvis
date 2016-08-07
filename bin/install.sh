@@ -5,15 +5,20 @@
 command -v docker > /dev/null 2>&1 || { echo >&2 "docker must be installed"; exit 1; }
 command -v docker-compose > /dev/null 2>&1 || { echo >&2 "docker-compose must be installed"; exit 1; }
 
+# TODO: Ensure that working directory is at the project root or maybe script
+# downloads necessary artifacts?
+
 if [ "$1" == "dev" ]; then
     echo "Starting Jarvis installation for local development.."
     JARVIS_DIR_ROOT="/tmp/jarvis"
+    JARVIS_DOCKER_COMPOSE_FILE="$PWD/docker-compose-dev.yml"
 elif [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root" 1>&2
     exit 1
 else
     echo "Starting Jarvis installation.."
     JARVIS_DIR_ROOT="/opt/jarvis"
+    JARVIS_DOCKER_COMPOSE_FILE="$PWD/docker-compose.yml"
 fi
 
 # Create required directories
@@ -27,4 +32,11 @@ do
     mkdir -p "$JARVIS_DIR_ROOT/$target_dir"
 done
 
-# TODO: Compose up
+# Docker-compose up
+
+if [ -e $JARVIS_DOCKER_COMPOSE_FILE ]; then
+    docker-compose -f $JARVIS_DOCKER_COMPOSE_FILE up -d
+else
+    echo "Error: Could not find docker-compose file"
+    exit 1
+fi
