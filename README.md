@@ -12,8 +12,9 @@ Meta-repository used to install and to setup the Jarvis backend system.
 4. Run the following as root:
 
     ```
-    sudo ./bin/install.sh
+    sudo ./bin/install.sh <username> <password>
     ```
+The `username` and `password` is used for http basic authentication.  This set of credentials must be used as configuration parameters in the `jarvis-cli`.
 
 ### For development
 
@@ -23,7 +24,7 @@ For Jarvis developers who are working on the `jarvis-api`, replacing step #4 wit
 ./bin/install.sh dev
 ```
 
-Will install to `/tmp` and install only the required Elasticsearch and Redis containers under a `dev` name and use different ports - 9300 and 6400 respectively.  Have your development instance of `jarvis-api` to use these containers.
+Will install to `/tmp` and install only the required Elasticsearch and Redis containers under a `dev` name.  Have your development instance of `jarvis-api` to use these containers via port 9200 and port 6379 respectively.
 
 ## To run
 
