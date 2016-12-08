@@ -2,13 +2,30 @@
 
 # Verify that the required dependencies are installed
 
-command -v docker > /dev/null 2>&1 || { echo >&2 "docker must be installed"; exit 1; }
-command -v docker-compose > /dev/null 2>&1 || { echo >&2 "docker-compose must be installed"; exit 1; }
+command -v docker > /dev/null 2>&1 \
+    || { echo >&2 "docker must be installed"; exit 1; }
+command -v docker-compose > /dev/null 2>&1 \
+    || { echo >&2 "docker-compose must be installed"; exit 1; }
+
+# Argument parsing
+
+if [ "$1" == "help" ]; then
+    echo "Usage:"
+    echo "install.sh dev"
+    echo "install.sh <username> <password>"
+    exit 0
+elif [ "$1" == "dev"]; then
+    MODE="dev"
+else
+    MODE="prod"
+    JARVIS_API_USER="$1"
+    JARVIS_API_PASSWORD="$2"
+fi
 
 # TODO: Ensure that working directory is at the project root or maybe script
 # downloads necessary artifacts?
 
-if [ "$1" == "dev" ]; then
+if [ "$MODE" == "dev" ]; then
     echo "Starting Jarvis installation for local development.."
     JARVIS_DIR_ROOT="/tmp/jarvis"
     JARVIS_DOCKER_COMPOSE_FILE="$PWD/docker-compose-dev.yml"
@@ -45,6 +62,16 @@ echo
 
 mkdir "$JARVIS_DIR_ROOT/Elasticsearch/mappings"
 cp $PWD/setup/mappings/* $JARVIS_DIR_ROOT/Elasticsearch/mappings
+
+# Setup Nginx
+
+if [ "$MODE" == "prod" ]; then
+    mkdir -p "$JARVIS_DIR_ROOT/etc/nginx"
+    cp $PWD/setup/nginx/* $JARVIS_DIR_ROOT/etc/nginx
+    # Inspired from https://www.digitalocean.com/community/tutorials/how-to-set-up-password-authentication-with-nginx-on-ubuntu-14-04
+    echo -n "$JARVIS_API_USER:" >> $JARVIS_DIR_ROOT/etc/nginx/htpasswd
+    openssl passwd -apr1 $JARVIS_API_PASSWORD >> $JARVIS_DIR_ROOT/etc/nginx/htpasswd
+fi
 
 echo
 

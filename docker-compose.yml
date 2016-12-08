@@ -1,6 +1,18 @@
 version: "2"
 # Seems docker-compose prefixes the services with the root project name which is "jarvis"
 services:
+    nginx:
+        depends_on:
+            - data-api
+        image: nginx:1.11.6
+        links:
+            - data-api:data-api.jarvis.home
+        ports:
+            - 80:80
+        volumes:
+            - ${JARVIS_DIR_ROOT}/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ${JARVIS_DIR_ROOT}/etc/nginx/htpasswd:/etc/nginx/htpasswd
+        restart: unless-stopped
     data-api:
         depends_on:
             - redis
@@ -8,27 +20,21 @@ services:
         # TODO: environment approach vs env_file approach
         environment:
             - JARVIS_DATA_VERSION=${JARVIS_DATA_VERSION}
-        image: clb6/jarvis-api:0.14.0
+        image: clb6/jarvis-api:0.15.0
         links:
             - redis:redis.jarvis.home
             - elasticsearch:elasticsearch.jarvis.home
-        ports:
-            - "3000:3000"
         volumes:
             - "${JARVIS_DIR_ROOT}:/opt/jarvis"
         restart: unless-stopped
     elasticsearch:
         image: elasticsearch:2.3.3
-        ports:
-            - "9200:9200"
         volumes:
             - "${JARVIS_DIR_ROOT}/Elasticsearch/:/usr/share/elasticsearch/data"
         restart: unless-stopped
     redis:
         command: redis-server --appendonly yes
         image: redis:3.2.1
-        ports:
-            - "6379:6379"
         volumes:
             - "${JARVIS_DIR_ROOT}/Redis/:/data"
         restart: unless-stopped
