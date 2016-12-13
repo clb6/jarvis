@@ -14,7 +14,7 @@ if [ "$1" == "help" ]; then
     echo "install.sh dev"
     echo "install.sh <username> <password>"
     exit 0
-elif [ "$1" == "dev"]; then
+elif [ "$1" == "dev" ]; then
     MODE="dev"
 else
     MODE="prod"
