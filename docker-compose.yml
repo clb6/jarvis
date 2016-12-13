@@ -20,7 +20,7 @@ services:
         # TODO: environment approach vs env_file approach
         environment:
             - JARVIS_DATA_VERSION=${JARVIS_DATA_VERSION}
-        image: clb6/jarvis-api:0.15.0
+        image: clb6/jarvis-api:0.15.1
         links:
             - redis:redis.jarvis.home
             - elasticsearch:elasticsearch.jarvis.home
